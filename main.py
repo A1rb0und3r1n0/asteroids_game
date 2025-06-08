@@ -2,7 +2,11 @@
 # the open-source pygame library
 # throughout this file
 import pygame
+
 from constants import *
+from player import *
+from asteroid import *
+from asteroidfield import *
 
 
 def main():
@@ -15,15 +19,37 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
+    updatables = pygame.sprite.Group()
+    drawables = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+    Player.containers = (updatables, drawables)
+    Asteroid.containers = (asteroids, updatables, drawables)
+    AsteroidField.containers = (updatables)
+
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    asteroidfield = AsteroidField()
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         
         screen.fill("black")
+
+        updatables.update(dt)
+
+        for asteroid in asteroids:
+            if player.colliding_with(asteroid):
+                print("Game Over!")
+                return
+            
+        for drawable in drawables:
+            drawable.draw(screen)
+
         pygame.display.flip()
         clock.tick(60)
         dt = clock.tick(60)/1000
+       
 
 
 
