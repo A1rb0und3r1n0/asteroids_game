@@ -13,6 +13,15 @@ from asteroidfield import *
 from shot import *
 
 
+
+def game_state():
+    global PAUSE
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+            PAUSE = not PAUSE
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE or event.type == pygame.QUIT:
+            sys.exit()
+
 def main():
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -23,9 +32,11 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
+ 
+    score_font = pygame.font.Font(None, 36)
+    pause_font = pygame.font.Font(None, 128)
 
     score = 0
-    score_increment = 1
 
     updatables = pygame.sprite.Group()
     drawables = pygame.sprite.Group()
@@ -40,37 +51,40 @@ def main():
     asteroidfield = AsteroidField()
 
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
+        game_state()
         
         screen.fill("black")
-
-        font = pygame.font.Font(None, 36)
-
-        updatables.update(dt)
-
-        for asteroid in asteroids:
-            if player.colliding_with(asteroid):
-                print("Game Over!")
-                return
-            
-        for asteroid in asteroids:
-            for shot in shots:
-                if asteroid.colliding_with(shot):
-                    asteroid.split(asteroidfield)
-                    shot.kill()
-                    score += score_increment
-            
-        for drawable in drawables:
-            drawable.draw(screen)
-
-        score_text = font.render(f'Score: {score}', True, (255, 255, 255))
+        score_text = score_font.render(f'Score: {score}', True, (255, 255, 255))
+        pause_text = pause_font.render('PAUSED', True, (255, 255, 255))
         screen.blit(score_text, (10, 10))
+
+        if PAUSE:
+            screen.blit(pause_text,(SCREEN_WIDTH/2 - pause_text.get_width()/2, SCREEN_HEIGHT/2 - pause_text.get_height()/2))
+        else:
+
+            updatables.update(dt)
+
+            for asteroid in asteroids:
+                if player.colliding_with(asteroid):
+                    print("Game Over!")
+                    return
+            
+            for asteroid in asteroids:
+                for shot in shots:
+                    if asteroid.colliding_with(shot):
+                        asteroid.split(asteroidfield)
+                        shot.kill()
+                        score += SCORE_INCREMENT
+            
+            for drawable in drawables:
+                drawable.draw(screen)
+
+        
 
         pygame.display.flip()
         clock.tick(60)
         dt = clock.tick(60)/1000
+        
        
 
 
