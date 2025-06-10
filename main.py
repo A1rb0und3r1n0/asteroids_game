@@ -53,17 +53,19 @@ def main():
 
     while True:
         game_state()
-
         global PLAYER_ALIVE
+        global PLAYER_LIVES
+        keys = pygame.key.get_pressed() 
         
         screen.fill("black")
-        score_text = score_font.render(f'Score: {score}', True, (255, 255, 255))
+        score_text_ui = score_font.render(f'Score: {score}', True, (255, 255, 255))
         pause_text = pause_font.render('PAUSED', True, (255, 255, 255))
         death_text = pause_font.render('GAME OVER', True, (255, 255, 255))
         lives_text = pause_font.render(f'Lives remaining: {PLAYER_LIVES}', True, (255, 255, 255))
+        lives_text_ui = score_font.render(f'Lives remaining: {PLAYER_LIVES}', True, (255, 255, 255))
         respawn_text = score_font.render('PRESS SPACE TO RESPAWN', True, (255, 255, 255))
-        screen.blit(score_text, (10, 10))
-        screen.blit(lives_text, (SCREEN_WIDTH, 10))
+        screen.blit(score_text_ui, (10, 10))
+        screen.blit(lives_text_ui, (SCREEN_WIDTH - (lives_text_ui.get_width() + 10), 10))
 
         if PAUSE:
             screen.blit(pause_text,(SCREEN_WIDTH/2 - pause_text.get_width()/2, SCREEN_HEIGHT/2 - pause_text.get_height()/2))
@@ -71,16 +73,25 @@ def main():
             if PLAYER_LIVES > 0:
                 screen.blit(lives_text,(SCREEN_WIDTH/2 - lives_text.get_width()/2, SCREEN_HEIGHT/2 - lives_text.get_height()/2))
                 screen.blit(respawn_text,(SCREEN_WIDTH/2 - respawn_text.get_width()/2, SCREEN_HEIGHT/2 - respawn_text.get_height()/2 + lives_text.get_height()))
+                if keys[pygame.K_SPACE]:
+                    screen.fill("black")
+                    PLAYER_LIVES -= 1
+                    PLAYER_ALIVE = True
+                    player.respawn()
+                    updatables.update(dt)
+                    print("spaced")
+                        
+
             else:
                 screen.blit(death_text,(SCREEN_WIDTH/2 - death_text.get_width()/2, SCREEN_HEIGHT/2 - death_text.get_height()/2))
+                return
         else:
             updatables.update(dt)
 
             for asteroid in asteroids:
                 if player.colliding_with(asteroid):
-                    print("Game Over!")
+                    #print("Game Over!")
                     PLAYER_ALIVE = False
-                    #return
             
             for asteroid in asteroids:
                 for shot in shots:
@@ -91,6 +102,7 @@ def main():
             
             for drawable in drawables:
                 drawable.draw(screen)
+  
 
         
 
