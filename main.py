@@ -2,6 +2,9 @@
 # the open-source pygame library
 # throughout this file
 import pygame
+import sys
+import os
+
 
 from constants import *
 from player import *
@@ -16,9 +19,13 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     pygame.init()
+    pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
+
+    score = 0
+    score_increment = 1
 
     updatables = pygame.sprite.Group()
     drawables = pygame.sprite.Group()
@@ -39,6 +46,8 @@ def main():
         
         screen.fill("black")
 
+        font = pygame.font.Font(None, 36)
+
         updatables.update(dt)
 
         for asteroid in asteroids:
@@ -51,9 +60,13 @@ def main():
                 if asteroid.colliding_with(shot):
                     asteroid.split(asteroidfield)
                     shot.kill()
+                    score += score_increment
             
         for drawable in drawables:
             drawable.draw(screen)
+
+        score_text = font.render(f'Score: {score}', True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))
 
         pygame.display.flip()
         clock.tick(60)

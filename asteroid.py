@@ -18,8 +18,8 @@ class Asteroid(CircleShape):
             return
         else:
             random_angle = random.uniform(20.0, 50.0)
-            direction1 = self.velocity.rotate(random_angle) * 5
-            direction2 = self.velocity.rotate(-random_angle) * 5
+            direction1 = self.velocity.rotate(random_angle) * 1.2
+            direction2 = self.velocity.rotate(-random_angle) * 1.2
             new_radius = self.radius - ASTEROID_MIN_RADIUS
 
             asteroidfield.spawn(new_radius, self.position, direction1) 
