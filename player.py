@@ -36,7 +36,7 @@ class Player(CircleShape):
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_w]:
-            self.move(dt)
+            self.move(dt) 
         if keys[pygame.K_s]:
             self.move(-dt)
         if keys[pygame.K_SPACE]:

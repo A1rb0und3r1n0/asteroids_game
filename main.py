@@ -59,7 +59,10 @@ def main():
         global PLAYER_LIVES
         keys = pygame.key.get_pressed() 
         
-        screen.fill("black")
+        
+        Backdrop = pygame.image.load("./Image_Files/Backdrop/Space.jpg")
+        Backdrop = pygame.transform.scale(Backdrop, (1280, 720))
+        screen.blit(Backdrop, Backdrop.get_rect())
         score_text_ui = score_font.render(f'Score: {score}', True, (255, 255, 255))
         pause_text = pause_font.render('PAUSED', True, (255, 255, 255))
         death_text = pause_font.render('GAME OVER', True, (255, 255, 255))
@@ -88,8 +91,6 @@ def main():
                     print("spaced")
             else:
                 screen.blit(death_text,(SCREEN_WIDTH/2 - death_text.get_width()/2, SCREEN_HEIGHT/2 - death_text.get_height()/2))
-                return
-
         else:
             updatables.update(dt)
 
