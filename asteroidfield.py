@@ -2,6 +2,7 @@ import pygame
 import random
 from asteroid import Asteroid
 from constants import *
+from explosion import Explosion
 
 
 class AsteroidField(pygame.sprite.Sprite):
@@ -35,6 +36,10 @@ class AsteroidField(pygame.sprite.Sprite):
     def spawn(self, radius, position, velocity):
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
+    
+    def spawn_explosion(self, radius, position):
+        explosion = Explosion(position.x, position.y, radius)
+        print("boom")
 
     def update(self, dt):
         self.spawn_timer += dt
