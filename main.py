@@ -55,10 +55,11 @@ def main():
 
     while True:
         game_state()
+
         global PLAYER_ALIVE
         global PLAYER_LIVES
+
         keys = pygame.key.get_pressed() 
-        
         
         Backdrop = pygame.image.load("./Image_Files/Backdrop/Space.jpg")
         Backdrop = pygame.transform.scale(Backdrop, (1280, 720))
@@ -72,9 +73,6 @@ def main():
         screen.blit(score_text_ui, (10, 10))
         screen.blit(lives_text_ui, (SCREEN_WIDTH - (lives_text_ui.get_width() + 10), 10))
 
-        if keys[pygame.K_c]:
-            pos = pygame.mouse.get_pos()
-            explosion = Explosion(pos[0], pos[1], 100)
 
         if PAUSE:
             screen.blit(pause_text,(SCREEN_WIDTH/2 - pause_text.get_width()/2, SCREEN_HEIGHT/2 - pause_text.get_height()/2))     
@@ -88,7 +86,6 @@ def main():
                     PLAYER_ALIVE = True
                     player.respawn()
                     updatables.update(dt)
-                    print("spaced")
             else:
                 screen.blit(death_text,(SCREEN_WIDTH/2 - death_text.get_width()/2, SCREEN_HEIGHT/2 - death_text.get_height()/2))
         else:
@@ -96,13 +93,11 @@ def main():
 
             for asteroid in asteroids:
                 if player.colliding_with(asteroid):
-                    #print("Game Over!")
                     PLAYER_ALIVE = False
             
             for asteroid in asteroids:
                 for shot in shots:
                     if asteroid.colliding_with(shot):
-                        #asteroidfield.spawn_explosion(asteroid.radius, asteroid.position)
                         asteroid.split(asteroidfield)
                         shot.kill()
                         score += SCORE_INCREMENT
