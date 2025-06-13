@@ -14,6 +14,15 @@ class Asteroid(CircleShape, pygame.sprite.Sprite):
         #pygame.draw.circle(screen, "white", self.position, self.radius, 2) #draws debug circle
 
     def update(self, dt):
+        if self.position.x > SCREEN_WIDTH + self.radius:
+            self.position.x = -self.radius
+        elif self.position.x < -self.radius:
+            self.position.x = SCREEN_WIDTH + self.radius
+        elif self.position.y > SCREEN_HEIGHT + self.radius:
+            self.position.y = -self.radius
+        elif self.position.y < -self.radius:
+            self.position.y = SCREEN_HEIGHT + self.radius
+        
         self.position += self.velocity * dt
         self.rect.center = (self.position.x, self.position.y)
        

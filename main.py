@@ -104,18 +104,11 @@ def main():
             
             for drawable in drawables:
                 drawable.draw(screen)
-  
-
-        
 
         pygame.display.flip()
         clock.tick(60)
         dt = clock.tick(60)/1000
         
-        #pygame.quit()
-       
-
-
 
 if __name__ == "__main__":
     main()

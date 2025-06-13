@@ -21,10 +21,12 @@ class Player(CircleShape):
         self.velocity = pygame.Vector2(0, 0)
 
     def draw(self, screen):
+        #screen.blit(self.image, self.rect)
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
     def rotate(self, dt):
-        self.rotation += dt * PLAYER_TURN_SPEED
+        self.rotation += (dt * PLAYER_TURN_SPEED)
+        
 
     def update(self, dt):
         self.shot_timer -= dt
@@ -41,6 +43,11 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_SPACE]:
             self.shoot(dt)
+
+        #self.rotation %= 360
+        #self.image = self.rotated_images[self.rotation // 1]
+        #self.rect = self.image.get_rect(center=self.rect.center)
+        
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
