@@ -60,18 +60,17 @@ def main():
         global PLAYER_LIVES
 
         keys = pygame.key.get_pressed() 
-        
         Backdrop = pygame.image.load("./Image_Files/Backdrop/Space.jpg")
-        Backdrop = pygame.transform.scale(Backdrop, (1280, 720))
-        screen.blit(Backdrop, Backdrop.get_rect())
+        Backdrop = pygame.transform.scale(Backdrop, (SCREEN_WIDTH, SCREEN_HEIGHT))
         score_text_ui = score_font.render(f'Score: {score}', True, (255, 255, 255))
         pause_text = pause_font.render('PAUSED', True, (255, 255, 255))
         death_text = pause_font.render('GAME OVER', True, (255, 255, 255))
         lives_text = pause_font.render(f'Lives remaining: {PLAYER_LIVES}', True, (255, 255, 255))
         lives_text_ui = score_font.render(f'Lives remaining: {PLAYER_LIVES}', True, (255, 255, 255))
         respawn_text = score_font.render('PRESS SPACE TO RESPAWN', True, (255, 255, 255))
-        screen.blit(score_text_ui, (10, 10))
-        screen.blit(lives_text_ui, (SCREEN_WIDTH - (lives_text_ui.get_width() + 10), 10))
+
+        
+        screen.blit(Backdrop, Backdrop.get_rect())
 
 
         if PAUSE:
@@ -94,7 +93,28 @@ def main():
             for asteroid in asteroids:
                 if player.colliding_with(asteroid):
                     PLAYER_ALIVE = False
-            
+
+            for asteroid in asteroids:
+                exclude = asteroid
+                for asteroid2 in asteroids:
+                    if asteroid2 == exclude:
+                        pass
+                    elif asteroid.colliding_with(asteroid2):
+                        asteroid.resolve_collision(asteroid2)
+                        #asteroid.split(asteroidfield)
+                        #asteroid2.split(asteroidfield)  
+
+            '''
+            for asteroid in asteroids:
+                exclude = asteroid
+                for asteroid2 in asteroids:
+                    if asteroid2 == exclude:
+                        pass
+                    elif asteroid.colliding_with(asteroid2) and asteroid.invulnerable == False and asteroid2.invulnerable == False:
+                        #asteroid.split(asteroidfield)
+                        #asteroid2.split(asteroidfield)  
+            '''
+
             for asteroid in asteroids:
                 for shot in shots:
                     if asteroid.colliding_with(shot):
@@ -105,10 +125,14 @@ def main():
             for drawable in drawables:
                 drawable.draw(screen)
 
+        
+        screen.blit(score_text_ui, (10, 10))
+        screen.blit(lives_text_ui, (SCREEN_WIDTH - (lives_text_ui.get_width() + 10), 10))
+
         pygame.display.flip()
         clock.tick(60)
         dt = clock.tick(60)/1000
-        
+
 
 if __name__ == "__main__":
     main()
